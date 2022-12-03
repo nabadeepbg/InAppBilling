@@ -26,7 +26,6 @@ public class InAppBilling{
     private BillingClient billingClient;
     private final Context context;
     private final String productId;
-
     private final PaymentListener paymentListener;
     private final PurchasesUpdatedListener purchasesUpdatedListener;
     private final ProductDetailsResponseListener productDetailsResponseListener;
