@@ -13,10 +13,8 @@ import com.nabadeepbg.inappbilling.sample.subsection.SubsectionActivity;
 public class MainActivity extends AppCompatActivity {
 
     public final String TAG = MainActivity.class.getName();
-
     public final String product_id = "android.test.purchased";
     public final String subsection_id = "android.test.purchased";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
