@@ -10,7 +10,7 @@ maven { url 'https://www.jitpack.io' }
 Step 2. Add the dependency
 
 ```gradle
-implementation 'com.github.nabadeepbg:InAppBilling:1.0.0'
+implementation 'com.github.nabadeepbg:InAppBilling:1.0.1'
 ```
 
 Example Code :
