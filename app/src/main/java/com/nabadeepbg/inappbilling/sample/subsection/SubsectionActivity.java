@@ -1,4 +1,4 @@
-package com.nabadeepbg.inappbilling.sample;
+package com.nabadeepbg.inappbilling.sample.subsection;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -7,14 +7,15 @@ import android.view.View;
 import android.widget.Button;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import com.nabadeepbg.inappbilling.InAppBilling;
-import com.nabadeepbg.inappbilling.PaymentListener;
+import com.nabadeepbg.inappbilling.InAppSubscription;
+import com.nabadeepbg.inappbilling.SubscriptionListener;
+import com.nabadeepbg.inappbilling.sample.R;
 
-public class ProductActivity extends AppCompatActivity implements PaymentListener {
+public class SubsectionActivity extends AppCompatActivity implements SubscriptionListener {
 
-    public final String TAG = ProductActivity.class.getName();
+    public final String TAG = SubsectionActivity.class.getName();
 
-    public InAppBilling inAppBilling;
+    public InAppSubscription inAppSubscription;
 
     Button buyProduct, btnDownload;
 
@@ -23,20 +24,21 @@ public class ProductActivity extends AppCompatActivity implements PaymentListene
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product);
+        setContentView(R.layout.activity_subsection);
+        Log.i(TAG,"SubsectionActivity - Open");
         context = this;
 
-        buyProduct = findViewById(R.id.buyProduct);
+        buyProduct = findViewById(R.id.buySubscribe);
         btnDownload = findViewById(R.id.btnDownload);
 
         Bundle bundle = getIntent().getExtras();
         if (bundle!=null){
 
-            String product_id = bundle.getString("product_id","");
+            String subscription_id = bundle.getString("subscription_id","");
 
-            if (product_id!=null && !product_id.isEmpty()){
+            if (subscription_id!=null && !subscription_id.isEmpty()){
 
-                inAppBilling = new InAppBilling(context ,product_id, this);
+                inAppSubscription = new InAppSubscription(context ,subscription_id, this);
 
             }
         }
@@ -45,8 +47,8 @@ public class ProductActivity extends AppCompatActivity implements PaymentListene
             @Override
             public void onClick(View view) {
 
-                if (inAppBilling!=null){
-                    inAppBilling.purchase();
+                if (inAppSubscription !=null){
+                    inAppSubscription.purchase();
                 }
             }
         });
@@ -64,24 +66,29 @@ public class ProductActivity extends AppCompatActivity implements PaymentListene
     @Override
     public void onBackPressed() {
 
-        if (inAppBilling!=null){
-            inAppBilling.endConnection();
+        if (inAppSubscription !=null){
+            inAppSubscription.endConnection();
         }
 
         super.onBackPressed();
     }
 
     @Override
-    public void onPurchased() {
-        Log.i(TAG,"onPurchased");
+    public void onSubscribed() {
+        Log.i(TAG,"onSubscribed");
 
         buyProduct.setVisibility(View.GONE);
         btnDownload.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void onAlreadyPurchased() {
-        Log.i(TAG,"onAlreadyPurchased");
+    public void onNotSubscribed() {
+        Log.i(TAG,"onNotSubscribed");
+    }
+
+    @Override
+    public void onAlreadySubscribed() {
+        Log.i(TAG,"onAlreadySubscribed");
 
         buyProduct.setVisibility(View.GONE);
         btnDownload.setVisibility(View.VISIBLE);
