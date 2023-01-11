@@ -45,22 +45,14 @@ public class SubsectionActivity extends AppCompatActivity implements Subscriptio
             }
         }
 
-        buyProduct.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        buyProduct.setOnClickListener(view -> {
 
-                if (inAppSubscription !=null){
-                    inAppSubscription.subscribe();
-                }
+            if (inAppSubscription !=null){
+                inAppSubscription.subscribe();
             }
         });
 
-        btnDownload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.i(TAG,"Download Product");
-            }
-        });
+        btnDownload.setOnClickListener(view -> Log.i(TAG,"Download Product"));
 
     }
 
@@ -77,53 +69,61 @@ public class SubsectionActivity extends AppCompatActivity implements Subscriptio
 
     @Override
     public void onSubscribed() {
-        Log.i(TAG,"onSubscribed");
-        Toast.makeText(context, "onSubscribed", Toast.LENGTH_SHORT).show();
 
-        buyProduct.setVisibility(View.GONE);
-        btnDownload.setVisibility(View.VISIBLE);
-    }
+        runOnUiThread(() -> {
+            Log.i(TAG,"onSubscribed");
+            Toast.makeText(context, "onSubscribed", Toast.LENGTH_SHORT).show();
 
-    @Override
-    public void onNotSubscribed() {
-        Log.i(TAG,"onNotSubscribed");
-        Toast.makeText(context, "onNotSubscribed", Toast.LENGTH_SHORT).show();
+            buyProduct.setVisibility(View.GONE);
+            btnDownload.setVisibility(View.VISIBLE);
+        });
 
     }
 
     @Override
     public void onAlreadySubscribed() {
-        Log.i(TAG,"onAlreadySubscribed");
-        Toast.makeText(context, "onAlreadySubscribed", Toast.LENGTH_SHORT).show();
+
+        runOnUiThread(() -> {
+            Log.i(TAG,"onAlreadySubscribed");
+            Toast.makeText(context, "onAlreadySubscribed", Toast.LENGTH_SHORT).show();
 
 
-        buyProduct.setVisibility(View.GONE);
-        btnDownload.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onCanceled() {
-        Log.i(TAG,"onCanceled");
-        Toast.makeText(context, "onCanceled", Toast.LENGTH_SHORT).show();
+            buyProduct.setVisibility(View.GONE);
+            btnDownload.setVisibility(View.VISIBLE);
+        });
 
     }
 
     @Override
-    public void onPending() {
-        Log.i(TAG,"onPending");
-        Toast.makeText(context, "onPending", Toast.LENGTH_SHORT).show();
+    public void onSubscribeCanceled() {
+
+        runOnUiThread(() -> {
+            Log.i(TAG,"onCanceled");
+            Toast.makeText(context, "onCanceled", Toast.LENGTH_SHORT).show();
+        });
+
 
     }
 
     @Override
-    public void onUnspecified() {
+    public void onSubscribePending() {
+
+        runOnUiThread(() -> {
+            Log.i(TAG,"onPending");
+            Toast.makeText(context, "onPending", Toast.LENGTH_SHORT).show();
+        });
+
+    }
+
+    @Override
+    public void onSubscribeUnspecified() {
         Log.i(TAG,"onUnspecified");
         Toast.makeText(context, "onUnspecified", Toast.LENGTH_SHORT).show();
 
     }
 
     @Override
-    public void onError() {
+    public void onSubscribeError() {
         Log.i(TAG,"onError");
         Toast.makeText(context, "onError", Toast.LENGTH_SHORT).show();
 

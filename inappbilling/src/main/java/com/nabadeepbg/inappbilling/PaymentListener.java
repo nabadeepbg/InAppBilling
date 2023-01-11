@@ -3,8 +3,8 @@ package com.nabadeepbg.inappbilling;
 public interface PaymentListener{
     void onPurchased();
     void onAlreadyPurchased();
-    void onCanceled();
-    void onPending();
-    void onUnspecified();
-    void onError();
+    void onPurchaseCanceled();
+    void onPurchasePending();
+    void onPurchaseUnspecified();
+    void onPurchaseError();
 }

@@ -76,7 +76,7 @@ public class InAppBilling{
                 case BillingClient.BillingResponseCode.USER_CANCELED:
                     Log.i(TAG, "onPurchasesUpdated: User canceled the purchase");
                     if (paymentListener!=null){
-                        paymentListener.onCanceled();
+                        paymentListener.onPurchaseCanceled();
                         Log.i(TAG,"InAppBilling - canceled");
                     }
                     break;
@@ -90,7 +90,7 @@ public class InAppBilling{
                 default:
                     Log.i(TAG, "onPurchasesUpdated: Default");
                     if (paymentListener!=null){
-                        paymentListener.onCanceled();
+                        paymentListener.onPurchaseCanceled();
                         Log.i(TAG,"InAppBilling - canceled");
                     }
             }
@@ -153,7 +153,7 @@ public class InAppBilling{
                         initiatePurchase();
                     }else {
                         if (paymentListener!=null){
-                            paymentListener.onError();
+                            paymentListener.onPurchaseError();
                         }
                     }
 
@@ -204,12 +204,12 @@ public class InAppBilling{
             }else if (checkProductId(purchase) && purchase.getPurchaseState() == Purchase.PurchaseState.PENDING){
                 Log.i(TAG,"Purchase.PurchaseState.PENDING");
                 if (paymentListener!=null){
-                    paymentListener.onPending();
+                    paymentListener.onPurchasePending();
                 }
             } else if (checkProductId(purchase) && purchase.getPurchaseState() == Purchase.PurchaseState.UNSPECIFIED_STATE){
                 Log.i(TAG,"Purchase.PurchaseState.UNSPECIFIED_STATE");
                 if (paymentListener!=null){
-                    paymentListener.onUnspecified();
+                    paymentListener.onPurchaseUnspecified();
                 }
             }else {
                 Log.i(TAG,"PurchaseState : "+purchase.getPurchaseState());

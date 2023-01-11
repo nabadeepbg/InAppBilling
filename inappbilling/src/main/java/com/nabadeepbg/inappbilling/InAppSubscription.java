@@ -5,9 +5,7 @@ import static com.android.billingclient.api.BillingClient.BillingResponseCode.OK
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
-
 import androidx.annotation.NonNull;
-
 import com.android.billingclient.api.AcknowledgePurchaseParams;
 import com.android.billingclient.api.AcknowledgePurchaseResponseListener;
 import com.android.billingclient.api.BillingClient;
@@ -21,7 +19,6 @@ import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.QueryProductDetailsParams;
 import com.android.billingclient.api.QueryPurchasesParams;
 import com.google.common.collect.ImmutableList;
-
 import java.util.List;
 
 public class InAppSubscription {
@@ -45,7 +42,6 @@ public class InAppSubscription {
             if (billingResult.getResponseCode() == OK) {
                 if (list.size()!=0){
                     for (ProductDetails  details : list){
-
                         ImmutableList<BillingFlowParams.ProductDetailsParams> productDetailsParamsList = null;
                         if (details.getSubscriptionOfferDetails() != null) {
                             productDetailsParamsList = ImmutableList.of(
@@ -87,15 +83,8 @@ public class InAppSubscription {
                 case BillingClient.BillingResponseCode.USER_CANCELED:
                     Log.i(TAG, "onPurchasesUpdated: User canceled the purchase");
                     if (subscriptionListener!=null){
-                        subscriptionListener.onCanceled();
+                        subscriptionListener.onSubscribeCanceled();
                         Log.i(TAG,"InAppSubscription - canceled");
-                    }
-                    break;
-                case BillingClient.BillingResponseCode.ITEM_NOT_OWNED:
-                    Log.i(TAG, "onPurchasesUpdated: User item not owned");
-                    if (subscriptionListener!=null){
-                        subscriptionListener.onNotSubscribed();
-                        Log.i(TAG,"InAppSubscription - ITEM_NOT_OWNED");
                     }
                     break;
                  case BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED:
@@ -108,7 +97,7 @@ public class InAppSubscription {
                 default:
                     Log.i(TAG, "onPurchasesUpdated: Default");
                     if (subscriptionListener!=null){
-                        subscriptionListener.onCanceled();
+                        subscriptionListener.onSubscribeCanceled();
                         Log.i(TAG,"InAppSubscription - canceled");
                     }
             }
@@ -171,7 +160,7 @@ public class InAppSubscription {
                         initiatePurchase();
                     }else {
                         if (subscriptionListener !=null){
-                            subscriptionListener.onError();
+                            subscriptionListener.onSubscribeError();
                         }
                     }
 
@@ -223,12 +212,12 @@ public class InAppSubscription {
             }else if (checkProductId(purchase) && purchase.getPurchaseState() == Purchase.PurchaseState.PENDING){
                 Log.i(TAG,"Purchase.PurchaseState.PENDING");
                 if (subscriptionListener !=null){
-                    subscriptionListener.onPending();
+                    subscriptionListener.onSubscribePending();
                 }
             } else if (checkProductId(purchase) && purchase.getPurchaseState() == Purchase.PurchaseState.UNSPECIFIED_STATE){
                 Log.i(TAG,"Purchase.PurchaseState.UNSPECIFIED_STATE");
                 if (subscriptionListener !=null){
-                    subscriptionListener.onUnspecified();
+                    subscriptionListener.onSubscribeUnspecified();
                 }
             }else {
                 Log.i(TAG,"PurchaseState : "+purchase.getPurchaseState());

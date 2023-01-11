@@ -2,10 +2,9 @@ package com.nabadeepbg.inappbilling;
 
 public interface SubscriptionListener {
     void onSubscribed();
-    void onNotSubscribed();
     void onAlreadySubscribed();
-    void onCanceled();
-    void onPending();
-    void onUnspecified();
-    void onError();
+    void onSubscribeCanceled();
+    void onSubscribePending();
+    void onSubscribeUnspecified();
+    void onSubscribeError();
 }

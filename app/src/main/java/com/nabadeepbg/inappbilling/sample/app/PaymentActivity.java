@@ -3,15 +3,12 @@ package com.nabadeepbg.inappbilling.sample.app;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.nabadeepbg.inappbilling.InAppBilling;
 import com.nabadeepbg.inappbilling.InAppSubscription;
 import com.nabadeepbg.inappbilling.PaymentListener;
@@ -51,17 +48,13 @@ public class PaymentActivity extends AppCompatActivity {
         inAppBilling = new InAppBilling(context, product_id, new PaymentListener() {
             @Override
             public void onPurchased() {
-                Log.i(TAG,"PaymentActivity : onPurchased 1");
 
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                runOnUiThread(() -> {
 
-                        Log.i(TAG,"PaymentActivity : onPurchased 2");
-                        Toast.makeText(context, "onPurchased", Toast.LENGTH_SHORT).show();
-                        downloadEnable(true);
-                        paymentEnable(false);
-                    }
+                    Log.i(TAG,"PaymentActivity : onPurchased");
+                    Toast.makeText(context, "onPurchased", Toast.LENGTH_SHORT).show();
+                    downloadEnable(true);
+                    paymentEnable(false);
                 });
 
 
@@ -69,37 +62,58 @@ public class PaymentActivity extends AppCompatActivity {
 
             @Override
             public void onAlreadyPurchased() {
-                Log.i(TAG,"onAlreadyPurchased");
-                Toast.makeText(context, "onAlreadyPurchased", Toast.LENGTH_SHORT).show();
-                downloadEnable(true);
-                paymentEnable(false);
-            }
 
-            @Override
-            public void onCanceled() {
-                Log.i(TAG,"onCanceled");
-                Toast.makeText(context, "onCanceled", Toast.LENGTH_SHORT).show();
+                runOnUiThread(() -> {
+
+                    Log.i(TAG,"onAlreadyPurchased");
+                    Toast.makeText(context, "onAlreadyPurchased", Toast.LENGTH_SHORT).show();
+                    downloadEnable(true);
+                    paymentEnable(false);
+                });
 
             }
 
             @Override
-            public void onPending() {
-                Log.i(TAG,"onPending");
-                Toast.makeText(context, "onPending", Toast.LENGTH_SHORT).show();
+            public void onPurchaseCanceled() {
+
+                runOnUiThread(() -> {
+                    Log.i(TAG,"onCanceled");
+                    Toast.makeText(context, "onCanceled", Toast.LENGTH_SHORT).show();
+                });
+
 
             }
 
             @Override
-            public void onUnspecified() {
-                Log.i(TAG,"onUnspecified");
-                Toast.makeText(context, "onUnspecified", Toast.LENGTH_SHORT).show();
+            public void onPurchasePending() {
+
+                runOnUiThread(() -> {
+                    Log.i(TAG,"onPending");
+                    Toast.makeText(context, "onPending", Toast.LENGTH_SHORT).show();
+                });
+
 
             }
 
             @Override
-            public void onError() {
-                Log.i(TAG,"onError");
-                Toast.makeText(context, "onError", Toast.LENGTH_SHORT).show();
+            public void onPurchaseUnspecified() {
+
+                runOnUiThread(() -> {
+                    Log.i(TAG,"onUnspecified");
+                    Toast.makeText(context, "onUnspecified", Toast.LENGTH_SHORT).show();
+                });
+
+
+            }
+
+            @Override
+            public void onPurchaseError() {
+
+                runOnUiThread(() -> {
+                    Log.i(TAG,"onError");
+                    Toast.makeText(context, "onError", Toast.LENGTH_SHORT).show();
+                });
+
 
             }
         });
@@ -107,81 +121,80 @@ public class PaymentActivity extends AppCompatActivity {
         inAppSubscription = new InAppSubscription(context, subsection_id, new SubscriptionListener() {
             @Override
             public void onSubscribed() {
-                Log.i(TAG,"onSubscribed");
-                Toast.makeText(context, "onSubscribed", Toast.LENGTH_SHORT).show();
-                downloadEnable(true);
-                subscribeEnable(false);
-                subscribe = true;
-            }
 
-            @Override
-            public void onNotSubscribed() {
-                Log.i(TAG,"onNotSubscribed");
-                Toast.makeText(context, "onNotSubscribed", Toast.LENGTH_SHORT).show();
+                runOnUiThread(() -> {
+                    Log.i(TAG,"onSubscribed");
+                    Toast.makeText(context, "onSubscribed", Toast.LENGTH_SHORT).show();
+                    downloadEnable(true);
+                    subscribeEnable(false);
+                    subscribe = true;
+                });
 
             }
 
             @Override
             public void onAlreadySubscribed() {
-                Log.i(TAG,"onAlreadySubscribed");
-                Toast.makeText(context, "onAlreadySubscribed", Toast.LENGTH_SHORT).show();
-                downloadEnable(true);
-                subscribeEnable(false);
-                subscribe = true;
-            }
 
-            @Override
-            public void onCanceled() {
-                Log.i(TAG,"onCanceled");
-                Toast.makeText(context, "onCanceled", Toast.LENGTH_SHORT).show();
+                runOnUiThread(() -> {
+                    Log.i(TAG,"onAlreadySubscribed");
+                    Toast.makeText(context, "onAlreadySubscribed", Toast.LENGTH_SHORT).show();
+                    downloadEnable(true);
+                    subscribeEnable(false);
+                    subscribe = true;
+                });
 
             }
 
             @Override
-            public void onPending() {
-                Log.i(TAG,"onPending");
-                Toast.makeText(context, "onPending", Toast.LENGTH_SHORT).show();
+            public void onSubscribeCanceled() {
+                runOnUiThread(() -> {
+                    Log.i(TAG,"onCanceled");
+                    Toast.makeText(context, "onCanceled", Toast.LENGTH_SHORT).show();
+                });
+
 
             }
 
             @Override
-            public void onUnspecified() {
-                Log.i(TAG,"onUnspecified");
-                Toast.makeText(context, "onUnspecified", Toast.LENGTH_SHORT).show();
+            public void onSubscribePending() {
+                runOnUiThread(() -> {
+                    Log.i(TAG,"onPending");
+                    Toast.makeText(context, "onPending", Toast.LENGTH_SHORT).show();
+                });
+
 
             }
 
             @Override
-            public void onError() {
-                Log.i(TAG,"onError");
-                Toast.makeText(context, "onError", Toast.LENGTH_SHORT).show();
+            public void onSubscribeUnspecified() {
+                runOnUiThread(() -> {
+                    Log.i(TAG,"onUnspecified");
+                    Toast.makeText(context, "onUnspecified", Toast.LENGTH_SHORT).show();
+                });
+
+
+            }
+
+            @Override
+            public void onSubscribeError() {
+                runOnUiThread(() -> {
+                    Log.i(TAG,"onError");
+                    Toast.makeText(context, "onError", Toast.LENGTH_SHORT).show();
+                });
+
 
             }
         });
 
-        buyProduct.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                inAppBilling.purchase();
-            }
-        });
+        buyProduct.setOnClickListener(view -> inAppBilling.purchase());
 
-        buySubscribe.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        buySubscribe.setOnClickListener(view -> inAppSubscription.subscribe());
 
+        btnDownload.setOnClickListener(view -> {
+            if (subscribe){
+                Toast.makeText(context, "Download Item", Toast.LENGTH_SHORT).show();
+            }else {
                 inAppSubscription.subscribe();
-            }
-        });
-
-        btnDownload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (subscribe){
-                    Toast.makeText(context, "Download Item", Toast.LENGTH_SHORT).show();
-                }else {
-                    inAppSubscription.subscribe();
-                }
             }
         });
     }
