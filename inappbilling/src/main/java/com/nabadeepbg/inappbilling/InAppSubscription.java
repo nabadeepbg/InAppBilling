@@ -46,20 +46,27 @@ public class InAppSubscription {
                 if (list.size()!=0){
                     for (ProductDetails  details : list){
 
-                        ImmutableList<BillingFlowParams.ProductDetailsParams> productDetailsParamsList =
-                                ImmutableList.of(
-                                        BillingFlowParams.ProductDetailsParams.newBuilder()
-                                                .setProductDetails(details)
-                                                .build()
-                                );
+                        ImmutableList<BillingFlowParams.ProductDetailsParams> productDetailsParamsList = null;
+                        if (details.getSubscriptionOfferDetails() != null) {
+                            productDetailsParamsList = ImmutableList.of(
+                                    BillingFlowParams.ProductDetailsParams.newBuilder()
+                                            .setProductDetails(details)
+                                            .setOfferToken(details.getSubscriptionOfferDetails().get(0).getOfferToken())
+                                            .build()
+                            );
 
-                        BillingFlowParams billingFlowParams = BillingFlowParams.newBuilder()
-                                .setProductDetailsParamsList(productDetailsParamsList)
-                                .build();
+                            BillingFlowParams  billingFlowParams = BillingFlowParams.newBuilder()
+                                    .setProductDetailsParamsList(productDetailsParamsList)
+                                    .build();
 
-                        billingClient.launchBillingFlow((Activity) context, billingFlowParams);
+                            billingClient.launchBillingFlow((Activity) context, billingFlowParams);
 
-                        Log.i(TAG,"InAppSubscription : launchBillingFlow");
+                            Log.i(TAG,"InAppSubscription : launchBillingFlow");
+                        }
+
+
+
+
 
                     }
                 }
@@ -69,7 +76,7 @@ public class InAppSubscription {
 
         purchasesUpdatedListener = (billingResult, purchases) -> {
 
-            Log.i(TAG, "billingClient - Purchases Updated : "+billingResult.getResponseCode());
+            Log.i(TAG, "InAppSubscription - Purchases Updated : "+billingResult.getResponseCode());
             int responseCode = billingResult.getResponseCode();
             switch (responseCode) {
                 case BillingClient.BillingResponseCode.OK:
@@ -122,7 +129,7 @@ public class InAppSubscription {
             @Override
             public void onBillingServiceDisconnected() {
 
-                Log.i(TAG, "BillingClient - Disconnection");
+                Log.i(TAG, "InAppSubscription - Disconnection");
             }
 
             @Override
@@ -140,10 +147,10 @@ public class InAppSubscription {
             }
         });
 
-        Log.i(TAG, "BillingClient - Connection");
+        Log.i(TAG, "InAppSubscription - Connection");
     }
 
-    public void purchase() {
+    public void subscribe() {
         if (billingClient.isReady()) {
             initiatePurchase();
         }else {
@@ -183,12 +190,12 @@ public class InAppSubscription {
 /*-------  Private Functions ------------*/
 
     private void initiatePurchase() {
-        Log.i(TAG, "BillingClient - set Product -"+productId);
+        Log.i(TAG, "InAppSubscription - set Product -"+productId);
         QueryProductDetailsParams queryProductDetailsParams =
                 QueryProductDetailsParams.newBuilder()
                         .setProductList(ImmutableList.of(QueryProductDetailsParams.Product.newBuilder()
                                 .setProductId(productId)
-                                .setProductType(BillingClient.ProductType.INAPP)
+                                .setProductType(BillingClient.ProductType.SUBS)
                                 .build())).build();
 
         billingClient.queryProductDetailsAsync(queryProductDetailsParams, productDetailsResponseListener);
@@ -196,11 +203,11 @@ public class InAppSubscription {
     }
 
     private void handlePurchases(List<Purchase> purchaseList){
+        Log.i(TAG,"handlePurchases : start");
         for (Purchase purchase : purchaseList) {
-
+            Log.i(TAG,"handlePurchases - : "+purchase.getPurchaseState());
             if (checkProductId(purchase) && purchase.getPurchaseState() == Purchase.PurchaseState.PURCHASED){
                 Log.i(TAG,"Purchase.PurchaseState.PURCHASED");
-
                 if (!purchase.isAcknowledged()) {
                     AcknowledgePurchaseParams acknowledgePurchaseParams =
                             AcknowledgePurchaseParams.newBuilder()
@@ -227,7 +234,6 @@ public class InAppSubscription {
                 Log.i(TAG,"PurchaseState : "+purchase.getPurchaseState());
             }
         }
-
 
     }
 

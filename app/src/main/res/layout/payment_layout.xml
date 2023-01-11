@@ -3,29 +3,36 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:gravity="center">
 
     <Button
-        android:id="@+id/openProduct"
-        android:text="@string/open_digital_product"
+        android:enabled="false"
+        android:visibility="gone"
+        android:id="@+id/btnDownload"
+        android:text="@string/download_product"
+        android:textAllCaps="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="10dp"/>
+
+    <Button
+        android:id="@+id/buyProduct"
+        android:text="@string/buy_digital_product"
         android:textAllCaps="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <Button
-        android:id="@+id/openSubsection"
-        android:text="@string/open_subsection"
+        android:id="@+id/buySubscribe"
+        android:text="@string/buy_subscription"
         android:textAllCaps="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <Button
-        android:id="@+id/openPayment"
-        android:text="@string/open_payment"
-        android:textAllCaps="false"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+
 
 </LinearLayout>

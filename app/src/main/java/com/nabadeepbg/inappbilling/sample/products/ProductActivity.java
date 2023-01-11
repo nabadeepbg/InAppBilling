@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.nabadeepbg.inappbilling.InAppBilling;
@@ -76,6 +78,7 @@ public class ProductActivity extends AppCompatActivity implements PaymentListene
     @Override
     public void onPurchased() {
         Log.i(TAG,"onPurchased");
+        Toast.makeText(context, "onPurchased", Toast.LENGTH_SHORT).show();
 
         buyProduct.setVisibility(View.GONE);
         btnDownload.setVisibility(View.VISIBLE);
@@ -84,6 +87,8 @@ public class ProductActivity extends AppCompatActivity implements PaymentListene
     @Override
     public void onAlreadyPurchased() {
         Log.i(TAG,"onAlreadyPurchased");
+        Toast.makeText(context, "onAlreadyPurchased", Toast.LENGTH_SHORT).show();
+
 
         buyProduct.setVisibility(View.GONE);
         btnDownload.setVisibility(View.VISIBLE);
@@ -92,20 +97,28 @@ public class ProductActivity extends AppCompatActivity implements PaymentListene
     @Override
     public void onCanceled() {
         Log.i(TAG,"onCanceled");
+        Toast.makeText(context, "onCanceled", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
     public void onPending() {
         Log.i(TAG,"onPending");
+        Toast.makeText(context, "onPending", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
     public void onUnspecified() {
         Log.i(TAG,"onUnspecified");
+        Toast.makeText(context, "onUnspecified", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
     public void onError() {
         Log.i(TAG,"onError");
+        Toast.makeText(context, "onError", Toast.LENGTH_SHORT).show();
+
     }
 }

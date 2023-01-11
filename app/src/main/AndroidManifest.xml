@@ -24,6 +24,8 @@
 
         <activity android:name=".products.ProductActivity" android:exported="true"/>
         <activity android:name=".subsection.SubsectionActivity" android:exported="true"/>
+        <activity android:name=".app.PaymentActivity" android:exported="true"/>
+
 
     </application>
 

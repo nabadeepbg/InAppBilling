@@ -6,12 +6,11 @@
     android:layout_height="match_parent"
     android:padding="10dp"
     android:gravity="center"
-    android:orientation="vertical"
-    tools:context="com.nabadeepbg.inappbilling.MainActivity">
+    android:orientation="vertical">
 
     <Button
         android:id="@+id/buyProduct"
-        android:text="Buy Digital Product"
+        android:text="@string/buy_digital_product"
         android:textAllCaps="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
@@ -19,7 +18,7 @@
     <Button
         android:visibility="gone"
         android:id="@+id/btnDownload"
-        android:text="Download Product"
+        android:text="@string/download_product"
         android:textAllCaps="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

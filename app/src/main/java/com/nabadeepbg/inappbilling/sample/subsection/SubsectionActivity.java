@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.nabadeepbg.inappbilling.InAppSubscription;
@@ -48,7 +50,7 @@ public class SubsectionActivity extends AppCompatActivity implements Subscriptio
             public void onClick(View view) {
 
                 if (inAppSubscription !=null){
-                    inAppSubscription.purchase();
+                    inAppSubscription.subscribe();
                 }
             }
         });
@@ -76,6 +78,7 @@ public class SubsectionActivity extends AppCompatActivity implements Subscriptio
     @Override
     public void onSubscribed() {
         Log.i(TAG,"onSubscribed");
+        Toast.makeText(context, "onSubscribed", Toast.LENGTH_SHORT).show();
 
         buyProduct.setVisibility(View.GONE);
         btnDownload.setVisibility(View.VISIBLE);
@@ -84,11 +87,15 @@ public class SubsectionActivity extends AppCompatActivity implements Subscriptio
     @Override
     public void onNotSubscribed() {
         Log.i(TAG,"onNotSubscribed");
+        Toast.makeText(context, "onNotSubscribed", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
     public void onAlreadySubscribed() {
         Log.i(TAG,"onAlreadySubscribed");
+        Toast.makeText(context, "onAlreadySubscribed", Toast.LENGTH_SHORT).show();
+
 
         buyProduct.setVisibility(View.GONE);
         btnDownload.setVisibility(View.VISIBLE);
@@ -97,20 +104,28 @@ public class SubsectionActivity extends AppCompatActivity implements Subscriptio
     @Override
     public void onCanceled() {
         Log.i(TAG,"onCanceled");
+        Toast.makeText(context, "onCanceled", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
     public void onPending() {
         Log.i(TAG,"onPending");
+        Toast.makeText(context, "onPending", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
     public void onUnspecified() {
         Log.i(TAG,"onUnspecified");
+        Toast.makeText(context, "onUnspecified", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
     public void onError() {
         Log.i(TAG,"onError");
+        Toast.makeText(context, "onError", Toast.LENGTH_SHORT).show();
+
     }
 }

@@ -181,7 +181,6 @@ public class InAppBilling{
                                 .build())).build();
 
         billingClient.queryProductDetailsAsync(queryProductDetailsParams, productDetailsResponseListener);
-
     }
 
     private void handlePurchases(List<Purchase> purchaseList){

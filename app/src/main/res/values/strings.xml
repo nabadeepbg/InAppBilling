@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">InAppBilling</string>
+    <string name="buy_digital_product">Buy Digital Product</string>
+    <string name="download_product">Download Product</string>
+    <string name="buy_subscription">Buy Subscription</string>
+    <string name="open_digital_product">Open Digital Product</string>
+    <string name="open_subsection">Open Subsection</string>
+    <string name="open_payment">Open Payment</string>
 </resources>
