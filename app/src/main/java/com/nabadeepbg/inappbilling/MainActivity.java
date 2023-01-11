@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     public final String product_id = "test_product";
     public final String subsection_id = "test_subsection";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
