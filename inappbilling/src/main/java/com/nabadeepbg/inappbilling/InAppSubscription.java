@@ -1,7 +1,6 @@
 package com.nabadeepbg.inappbilling;
 
 import static com.android.billingclient.api.BillingClient.BillingResponseCode.OK;
-
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
