@@ -42,7 +42,7 @@ public class InAppSubscription {
             if (billingResult.getResponseCode() == OK) {
                 if (list.size()!=0){
                     for (ProductDetails  details : list){
-                        ImmutableList<BillingFlowParams.ProductDetailsParams> productDetailsParamsList = null;
+                        ImmutableList<BillingFlowParams.ProductDetailsParams> productDetailsParamsList;
                         if (details.getSubscriptionOfferDetails() != null) {
                             productDetailsParamsList = ImmutableList.of(
                                     BillingFlowParams.ProductDetailsParams.newBuilder()
