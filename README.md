@@ -83,3 +83,70 @@ Before stopping the activity make sure to end the connection of purchase. :
         super.onBackPressed();
     }
 ```
+Initialize InAppSubscription in Activity :
+
+```java
+
+ InAppSubscription inAppSubscription = new InAppSubscription(context, subsection_id , new SubscriptionListener() {
+            @Override
+            public void onSubscribed() {
+
+            }
+
+            @Override
+            public void onAlreadySubscribed() {
+
+            }
+
+            @Override
+            public void onSubscribeCanceled() {
+
+            }
+
+            @Override
+            public void onSubscribePending() {
+
+            }
+
+            @Override
+            public void onSubscribeUnspecified() {
+
+            }
+
+            @Override
+            public void onSubscribeError() {
+
+            }
+        });
+```
+
+Request to subscribe :
+
+```java
+
+btnSubscribe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                 if (inAppSubscription !=null){
+                inAppSubscription.subscribe();
+                }
+            }
+        });
+
+```
+
+Before stopping the activity make sure to end the connection of purchase. :
+
+```java
+
+  @Override
+    public void onBackPressed() {
+
+         if (inAppSubscription !=null){
+            inAppSubscription.endConnection();
+        }
+
+        super.onBackPressed();
+    }
+```
