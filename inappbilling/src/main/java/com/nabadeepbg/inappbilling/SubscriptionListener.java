@@ -1,7 +1,7 @@
 package com.nabadeepbg.inappbilling;
 
 public interface SubscriptionListener {
-    void onSubscribed();
+    void onSubscribed(String packageName , String productId , String token);
     void onAlreadySubscribed();
     void onSubscribeCanceled();
     void onSubscribePending();

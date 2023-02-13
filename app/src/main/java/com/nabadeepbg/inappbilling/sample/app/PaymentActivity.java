@@ -14,6 +14,10 @@ import com.nabadeepbg.inappbilling.InAppSubscription;
 import com.nabadeepbg.inappbilling.PaymentListener;
 import com.nabadeepbg.inappbilling.SubscriptionListener;
 import com.nabadeepbg.inappbilling.sample.R;
+import com.nabadeepbg.inappbilling.validation.CallBackResponse;
+import com.nabadeepbg.inappbilling.validation.PurchaseValidation;
+import com.nabadeepbg.inappbilling.validation.Receipt;
+import com.nabadeepbg.inappbilling.validation.Types;
 
 public class PaymentActivity extends AppCompatActivity {
 
@@ -32,6 +36,9 @@ public class PaymentActivity extends AppCompatActivity {
 
     public boolean subscribe = false;
 
+
+   PurchaseValidation validation;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,16 +52,59 @@ public class PaymentActivity extends AppCompatActivity {
 
         downloadEnable(false);
 
-        inAppBilling = new InAppBilling(context, product_id, new PaymentListener() {
+        validation = new PurchaseValidation(context,  new CallBackResponse() {
             @Override
-            public void onPurchased() {
+            public void onSuccess(Receipt receipt) {
+
+                if (receipt.getType().equals(Types.Products)){
+                    Log.i(TAG,"PurchaseValidation  : Products - onSuccess");
+
+                    runOnUiThread(() -> {
+                        Log.i(TAG,"PaymentActivity : onPurchased");
+                        Toast.makeText(context, "onPurchased", Toast.LENGTH_SHORT).show();
+                        downloadEnable(true);
+                        paymentEnable(false);
+                    });
+                }else if (receipt.getType().equals(Types.Subscriptions)){
+
+                    Log.i(TAG,"PurchaseValidation  : Subscriptions - onSuccess");
+
+                    runOnUiThread(() -> {
+                        Log.i(TAG,"onSubscribed");
+                        Toast.makeText(context, "onSubscribed", Toast.LENGTH_SHORT).show();
+                        downloadEnable(true);
+                        subscribeEnable(false);
+                        subscribe = true;
+                    });
+                }
+
+
+            }
+
+            @Override
+            public void onFailed() {
+                Log.i(TAG,"PurchaseValidation  : onFailed");
+            }
+
+            @Override
+            public void onError() {
+                Log.i(TAG,"PurchaseValidation  : onError");
+            }
+        });
+
+        inAppBilling = new InAppBilling(context, product_id, new PaymentListener() {
+
+            @Override
+            public void onPurchased(final String packageName,final String productId,final String token) {
 
                 runOnUiThread(() -> {
 
-                    Log.i(TAG,"PaymentActivity : onPurchased");
-                    Toast.makeText(context, "onPurchased", Toast.LENGTH_SHORT).show();
-                    downloadEnable(true);
-                    paymentEnable(false);
+                    Log.i(TAG,"onPurchaseData  packageName : "+packageName);
+                    Log.i(TAG,"onPurchaseData  productId : "+productId);
+                    Log.i(TAG,"onPurchaseData  token : "+token);
+
+                    validation.request(getResources().getString(R.string.server_url),new Receipt(Types.Products,packageName,productId,token));
+
                 });
 
 
@@ -119,15 +169,17 @@ public class PaymentActivity extends AppCompatActivity {
         });
 
         inAppSubscription = new InAppSubscription(context, subsection_id, new SubscriptionListener() {
+
             @Override
-            public void onSubscribed() {
+            public void onSubscribed(String packageName, String productId, String token) {
 
                 runOnUiThread(() -> {
-                    Log.i(TAG,"onSubscribed");
-                    Toast.makeText(context, "onSubscribed", Toast.LENGTH_SHORT).show();
-                    downloadEnable(true);
-                    subscribeEnable(false);
-                    subscribe = true;
+
+                    Log.i(TAG,"onSubscribeData  packageName : "+packageName);
+                    Log.i(TAG,"onSubscribeData  productId : "+productId);
+                    Log.i(TAG,"onSubscribeData  token : "+token);
+
+                    validation.request(getResources().getString(R.string.server_url),new Receipt(Types.Subscriptions,packageName,productId,token));
                 });
 
             }
@@ -147,6 +199,7 @@ public class PaymentActivity extends AppCompatActivity {
 
             @Override
             public void onSubscribeCanceled() {
+
                 runOnUiThread(() -> {
                     Log.i(TAG,"onCanceled");
                     Toast.makeText(context, "onCanceled", Toast.LENGTH_SHORT).show();

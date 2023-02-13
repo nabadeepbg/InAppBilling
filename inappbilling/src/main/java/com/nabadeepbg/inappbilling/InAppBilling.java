@@ -49,6 +49,8 @@ public class InAppBilling{
                                                 .build()
                                 );
 
+
+
                         BillingFlowParams billingFlowParams = BillingFlowParams.newBuilder()
                                 .setProductDetailsParamsList(productDetailsParamsList)
                                 .build();
@@ -56,6 +58,8 @@ public class InAppBilling{
                         billingClient.launchBillingFlow((Activity) context, billingFlowParams);
 
                         Log.i(TAG,"InAppBilling : launchBillingFlow");
+
+
 
                     }
                 }
@@ -96,14 +100,7 @@ public class InAppBilling{
             }
         };
 
-        ackPurchase = billingResult -> {
-            if(billingResult.getResponseCode()==BillingClient.BillingResponseCode.OK){
-                if (paymentListener!=null){
-                    paymentListener.onPurchased();
-                    Log.i(TAG,"InAppBilling - success");
-                }
-            }
-        };
+        ackPurchase = billingResult -> {};
 
         billingClient = BillingClient.newBuilder(context).enablePendingPurchases().setListener(purchasesUpdatedListener).build();
 
@@ -190,15 +187,21 @@ public class InAppBilling{
                 Log.i(TAG,"Purchase.PurchaseState.PURCHASED");
 
                 if (!purchase.isAcknowledged()) {
+
                     AcknowledgePurchaseParams acknowledgePurchaseParams =
                             AcknowledgePurchaseParams.newBuilder()
                                     .setPurchaseToken(purchase.getPurchaseToken())
                                     .build();
                     billingClient.acknowledgePurchase(acknowledgePurchaseParams, ackPurchase);
+
+                    if (paymentListener!=null){
+                        paymentListener.onPurchased(purchase.getPackageName(),purchase.getProducts().get(0),purchase.getPurchaseToken());
+                        Log.i(TAG,"InAppBilling A - success");
+                    }
                 }else {
                     if (paymentListener!=null){
-                        paymentListener.onPurchased();
-                        Log.i(TAG,"InAppBilling - success");
+                        paymentListener.onPurchased(purchase.getPackageName(),purchase.getProducts().get(0),purchase.getPurchaseToken());
+                        Log.i(TAG,"InAppBilling B - success");
                     }
                 }
             }else if (checkProductId(purchase) && purchase.getPurchaseState() == Purchase.PurchaseState.PENDING){

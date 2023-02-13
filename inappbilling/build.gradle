@@ -28,7 +28,7 @@ android {
 
 dependencies {
 
-    implementation 'androidx.appcompat:appcompat:1.6.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
@@ -36,5 +36,6 @@ dependencies {
 
     implementation 'com.android.billingclient:billing:5.1.0'
     implementation 'com.google.collections:google-collections:1.0-rc2'
+    implementation 'com.android.volley:volley:1.2.1'
 
 }

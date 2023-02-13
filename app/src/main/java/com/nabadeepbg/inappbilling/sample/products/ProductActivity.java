@@ -6,12 +6,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.nabadeepbg.inappbilling.InAppBilling;
 import com.nabadeepbg.inappbilling.PaymentListener;
 import com.nabadeepbg.inappbilling.sample.R;
+import com.nabadeepbg.inappbilling.validation.CallBackResponse;
+import com.nabadeepbg.inappbilling.validation.PurchaseValidation;
+import com.nabadeepbg.inappbilling.validation.Receipt;
+import com.nabadeepbg.inappbilling.validation.Types;
 
 public class ProductActivity extends AppCompatActivity implements PaymentListener {
 
@@ -23,6 +26,9 @@ public class ProductActivity extends AppCompatActivity implements PaymentListene
 
     Context context;
 
+
+    PurchaseValidation validation;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +39,9 @@ public class ProductActivity extends AppCompatActivity implements PaymentListene
         buyProduct = findViewById(R.id.buyProduct);
         btnDownload = findViewById(R.id.btnDownload);
 
+
         Bundle bundle = getIntent().getExtras();
+
         if (bundle!=null){
 
             String product_id = bundle.getString("product_id","");
@@ -54,6 +62,38 @@ public class ProductActivity extends AppCompatActivity implements PaymentListene
 
         btnDownload.setOnClickListener(view -> Log.i(TAG,"Download Product"));
 
+
+        validation = new PurchaseValidation(context,  new CallBackResponse() {
+            @Override
+            public void onSuccess(Receipt receipt) {
+                Log.i(TAG,"PurchaseValidation  : onSuccess");
+
+                if (receipt.getType().equals(Types.Products)){
+                    Log.i(TAG,"PurchaseValidation  : Products - onSuccess");
+
+                    Log.i(TAG,"onPurchased 2");
+
+                    runOnUiThread(() -> {
+
+                        Toast.makeText(context, "onPurchased", Toast.LENGTH_SHORT).show();
+
+                        buyProduct.setVisibility(View.GONE);
+                        btnDownload.setVisibility(View.VISIBLE);
+                    });
+                }
+            }
+
+            @Override
+            public void onFailed() {
+                Log.i(TAG,"PurchaseValidation  : onFailed");
+            }
+
+            @Override
+            public void onError() {
+                Log.i(TAG,"PurchaseValidation  : onError");
+            }
+        });
+
     }
 
 
@@ -68,15 +108,17 @@ public class ProductActivity extends AppCompatActivity implements PaymentListene
     }
 
     @Override
-    public void onPurchased() {
-        Log.i(TAG,"onPurchased");
+    public void onPurchased(final String packageName, final String productId, final String token) {
 
         runOnUiThread(() -> {
-            Toast.makeText(context, "onPurchased", Toast.LENGTH_SHORT).show();
+            Log.i(TAG,"onPurchaseData  packageName : "+packageName);
+            Log.i(TAG,"onPurchaseData  productId : "+productId);
+            Log.i(TAG,"onPurchaseData  token : "+token);
 
-            buyProduct.setVisibility(View.GONE);
-            btnDownload.setVisibility(View.VISIBLE);
+            validation.request(getResources().getString(R.string.server_url),new Receipt(Types.Products,packageName,productId,token));
+
         });
+
 
     }
 
@@ -95,6 +137,7 @@ public class ProductActivity extends AppCompatActivity implements PaymentListene
 
     @Override
     public void onPurchaseCanceled() {
+
         runOnUiThread(() -> {
             Log.i(TAG,"onCanceled");
             Toast.makeText(context, "onCanceled", Toast.LENGTH_SHORT).show();

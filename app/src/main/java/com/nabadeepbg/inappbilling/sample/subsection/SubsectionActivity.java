@@ -6,12 +6,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.nabadeepbg.inappbilling.InAppSubscription;
 import com.nabadeepbg.inappbilling.SubscriptionListener;
 import com.nabadeepbg.inappbilling.sample.R;
+import com.nabadeepbg.inappbilling.validation.CallBackResponse;
+import com.nabadeepbg.inappbilling.validation.PurchaseValidation;
+import com.nabadeepbg.inappbilling.validation.Receipt;
+import com.nabadeepbg.inappbilling.validation.Types;
 
 public class SubsectionActivity extends AppCompatActivity implements SubscriptionListener {
 
@@ -22,6 +25,9 @@ public class SubsectionActivity extends AppCompatActivity implements Subscriptio
     Button buyProduct, btnDownload;
 
     Context context;
+
+
+    PurchaseValidation validation;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,6 +60,36 @@ public class SubsectionActivity extends AppCompatActivity implements Subscriptio
 
         btnDownload.setOnClickListener(view -> Log.i(TAG,"Download Product"));
 
+        validation = new PurchaseValidation(context,  new CallBackResponse() {
+            @Override
+            public void onSuccess(Receipt receipt) {
+                Log.i(TAG,"PurchaseValidation  : onSuccess");
+
+                if (receipt.getType().equals(Types.Subscriptions)){
+                    Log.i(TAG,"PurchaseValidation  : Subscriptions - onSuccess");
+
+                    runOnUiThread(() -> {
+
+                        Log.i(TAG,"onSubscribed");
+                        Toast.makeText(context, "onSubscribed", Toast.LENGTH_SHORT).show();
+
+                        buyProduct.setVisibility(View.GONE);
+                        btnDownload.setVisibility(View.VISIBLE);
+                    });
+                }
+            }
+
+            @Override
+            public void onFailed() {
+                Log.i(TAG,"PurchaseValidation  : onFailed");
+            }
+
+            @Override
+            public void onError() {
+                Log.i(TAG,"PurchaseValidation  : onError");
+            }
+        });
+
     }
 
 
@@ -67,16 +103,15 @@ public class SubsectionActivity extends AppCompatActivity implements Subscriptio
         super.onBackPressed();
     }
 
+
+
     @Override
-    public void onSubscribed() {
+    public void onSubscribed(String packageName, String productId, String token) {
+        Log.i(TAG,"onSubscribeData  packageName : "+packageName);
+        Log.i(TAG,"onSubscribeData  productId : "+productId);
+        Log.i(TAG,"onSubscribeData  token : "+token);
 
-        runOnUiThread(() -> {
-            Log.i(TAG,"onSubscribed");
-            Toast.makeText(context, "onSubscribed", Toast.LENGTH_SHORT).show();
-
-            buyProduct.setVisibility(View.GONE);
-            btnDownload.setVisibility(View.VISIBLE);
-        });
+        validation.request(getResources().getString(R.string.server_url),new Receipt(Types.Subscriptions, packageName, productId, token));
 
     }
 

@@ -6,4 +6,5 @@
     <string name="open_digital_product">Open Digital Product</string>
     <string name="open_subsection">Open Subsection</string>
     <string name="open_payment">Open Payment</string>
+    <string name="server_url">PHP SERVER SITE PAYMENT VALIDATION URL</string>
 </resources>

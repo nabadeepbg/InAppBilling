@@ -102,14 +102,7 @@ public class InAppSubscription {
             }
         };
 
-        ackPurchase = billingResult -> {
-            if(billingResult.getResponseCode()==BillingClient.BillingResponseCode.OK){
-                if (subscriptionListener!=null){
-                    subscriptionListener.onSubscribed();
-                    Log.i(TAG,"InAppSubscription - success");
-                }
-            }
-        };
+        ackPurchase = billingResult -> {};
 
         billingClient = BillingClient.newBuilder(context).enablePendingPurchases().setListener(purchasesUpdatedListener).build();
 
@@ -202,10 +195,15 @@ public class InAppSubscription {
                                     .setPurchaseToken(purchase.getPurchaseToken())
                                     .build();
                     billingClient.acknowledgePurchase(acknowledgePurchaseParams, ackPurchase);
+
+                    if (subscriptionListener !=null){
+                        subscriptionListener.onSubscribed(purchase.getPackageName(),purchase.getProducts().get(0),purchase.getPurchaseToken());
+                        Log.i(TAG,"InAppSubscription A - success");
+                    }
                 }else {
                     if (subscriptionListener !=null){
-                        subscriptionListener.onSubscribed();
-                        Log.i(TAG,"InAppSubscription - success");
+                        subscriptionListener.onSubscribed(purchase.getPackageName(),purchase.getProducts().get(0),purchase.getPurchaseToken());
+                        Log.i(TAG,"InAppSubscription B - success");
                     }
                 }
             }else if (checkProductId(purchase) && purchase.getPurchaseState() == Purchase.PurchaseState.PENDING){
