@@ -12,6 +12,7 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
+
 rootProject.name = "InAppBilling"
 include ':app'
 include ':inappbilling'
